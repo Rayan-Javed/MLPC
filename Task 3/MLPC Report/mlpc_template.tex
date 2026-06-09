@@ -1,0 +1,244 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2023
+
+% ready for submission
+\usepackage[final]{neurips_2023}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2023}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{graphicx}       % include images
+\usepackage{subcaption}     % side-by-side figures
+
+
+\title{MLPC 2026 Task 3: Data Exploration Report}
+
+
+\author{%
+  Team Stochastic Pipelines \AND
+  Waji Ul Hassan Syed
+  \And
+  Rayan Ali Javed
+}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION 1: VERIFY ANNOTATIONS & QUALITATIVE ANALYSIS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Verify Annotations \& Qualitative Analysis}
+
+\subsection{Summary of Disagreements}
+
+We reviewed 10 audio recordings via Label Studio (5 per team member) and identified the following disagreement and violation trends:
+
+\textbf{Valid temporal boundary differences:} In 004223.wav, annotators differed by 0.1--0.3\,s on \texttt{door\_open\_close} boundaries. These small differences reflect subjective perception and are not violations.
+
+\textbf{Missing events (violation):} In 002261.wav, Annotators~1 and~3 missed early footsteps (1.1--2.7\,s) that Annotator~2 correctly identified. In 004224.wav, Annotator~3 missed a \texttt{window\_open\_close} event at 12\,s, and Annotators~2 \& 3 missed the water refilling phase as \texttt{toilet\_flushing}.
+
+\textbf{One-second rule violations:} Two types were observed. (1)~Unnecessary split: In 004224.wav, Annotator~1 split \texttt{toilet\_flushing} with only a 0.027\,s gap. (2)~Failure to split: In 002261.wav, Annotators~2 and~3 created one broad \texttt{footsteps} region (10.8--18.2\,s) containing distinct door and keychain events.
+
+\textbf{Overlapping regions covering distinct events (violation):} In 002261.wav, Annotators~2 \& 3 created a broad \texttt{footsteps} region overlapping separately annotated door and keychain events. The footsteps label covered audio belonging to different classes.
+
+\textbf{Class confusion (violation):} Annotator k12341567 marked a second \texttt{door\_open\_close} that was actually \texttt{window\_open\_close}.
+
+\textbf{Lack of millisecond precision (violation):} Multiple annotators included silence before/after sounds, making events longer than actual.
+
+\textbf{Annotating non-target sounds (violation):} One annotator marked background noise as \texttt{footsteps}.
+
+\textbf{Does disagreement always imply a violation?} No. Small boundary differences (0.1--0.3\,s) are valid perceptual variation. Violations occur only when rules are broken: wrong class, missing events, oversized regions covering distinct events, one-second rule violations, or annotating non-target sounds.
+
+\subsection{Case Study}
+
+\textbf{Filename:} 002263.wav
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{1.png}
+    \caption{Annotator k12341567}
+    \label{fig:case_a}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{2.png}
+    \caption{Annotator k12455652}
+    \label{fig:case_b}
+  \end{subfigure}
+  \caption{Side-by-side comparison of annotations for 002263.wav showing disagreements between two annotators.}
+  \label{fig:casestudy}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{3.png}
+  \caption{Corrected annotation overview for 002263.wav showing the final regions after review: \texttt{door\_open\_close}, \texttt{footsteps}, \texttt{running\_water}, and \texttt{window\_open\_close}.}
+  \label{fig:case_corrected}
+\end{figure}
+
+Annotator k12341567 (Figure~\ref{fig:case_a}) marked two \texttt{door\_open\_close} events, while Annotator k12455652 (Figure~\ref{fig:case_b}) marked only one and missed the second event entirely. Upon careful listening, the second event was actually a \texttt{window\_open\_close}, constituting a class confusion violation. Both annotators also split footsteps into two separate regions at the beginning despite no pause longer than one second, violating the one-second rule. Both also lacked millisecond precision, including silence before and after actual sounds.
+
+This case illustrates three common problems: class confusion (door vs.\ window), missing events (window not annotated), and incorrect splitting (footsteps). Annotator k12455652 likely rushed or did not listen to the whole recording. The corrected annotation (Figure~\ref{fig:case_corrected}) shows the final result after we added the missing window annotation, merged the duplicate footstep regions, and adjusted timing boundaries.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION 2: ANNOTATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Annotations}
+
+\subsection{Annotator Agreement}
+
+We quantified annotator agreement by checking, for each time segment and class, whether all annotators assigned the same binary label. Only files with at least two annotators were used (3,031 files). The overall agreement was \textbf{95.33\%}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{4.jpeg}
+  \caption{Class-wise annotator agreement. Footsteps shows the lowest agreement at 84.8\%.}
+  \label{fig:agreement}
+\end{figure}
+
+As shown in Figure~\ref{fig:agreement}, \texttt{coffee\_machine} (98.63\%), \texttt{vacuum\_cleaner} (98.48\%), and \texttt{bell\_ringing} (98.39\%) achieved the highest agreement, as these are loud, distinctive sounds. \texttt{Footsteps} had the lowest agreement (84.82\%), likely because footsteps can be quiet and masked by background noise. \texttt{Door\_open\_close} (91.61\%) and \texttt{cutlery\_dishes} (93.04\%) also showed lower agreement due to acoustic variability.
+
+\subsection{Convert Annotations to Labels}
+
+We derived binary labels using \textbf{majority voting}: for each time segment and class, if at least 2 out of 3 annotators marked the sound as present, the label is set to~1; otherwise~0. Files with fewer than 2 annotators were excluded. The 3,031 files contained 139,259 one-second time segments, of which 76,413 (54.87\%) contained at least one target sound. The average sound per file was 54.55\%, but the standard deviation was high (26.98\%), meaning some files had many sounds while others had almost none.
+
+This method assumes most annotators are correct and their errors are independent. Labels could be incorrect if: (1)~two annotators make the same mistake (e.g., both miss a quiet sound), or (2)~all annotators are uncertain about an ambiguous event. We also considered the \texttt{is\_own\_recording} flag and \texttt{target\_classes} metadata to cross-check consistency.
+
+\subsection{Label Characteristics}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{5.png}
+  \caption{Class frequency as percentage of total time segments.}
+  \label{fig:classfreq}
+\end{figure}
+
+\textbf{Class frequency} (Figure~\ref{fig:classfreq}): The most frequent class was \texttt{running\_water} (11.30\%), followed by \texttt{footsteps} (9.73\%) and \texttt{keyboard\_typing} (8.08\%). The least frequent was \texttt{light\_switch} (0.13\%), reflecting its short duration rather than low agreement (97.36\%). Class frequencies sum to 64.63\%, while overall sound presence is 54.87\%; the 9.76\% difference indicates temporal overlap (polyphony).
+
+\textbf{Class duration:} Longest average durations were \texttt{vacuum\_cleaner} (33.36\,s), \texttt{microwave} (29.54\,s), and \texttt{coffee\_machine} (29.04\,s)---continuous machine sounds with high agreement (${\sim}$98\%). Shortest were \texttt{light\_switch} (3.34\,s), \texttt{window\_open\_close} (3.45\,s), and \texttt{wardrobe\_drawer\_open\_close} (4.28\,s). \texttt{Door\_open\_close} (4.53\,s) also had low agreement (91.61\%), confirming that short, variable sounds are harder for annotators to agree on.
+
+\textbf{Co-occurrence:} The most common co-occurring pair was \texttt{cutlery\_dishes} with \texttt{running\_water} (1,904 segments), followed by \texttt{microwave} with \texttt{running\_water} (1,838), both reflecting kitchen scenarios. \texttt{Keyboard\_typing} with \texttt{phone\_ringing} (1,333) reflects office settings.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION 3: AUDIO FEATURES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Audio Features}
+
+\subsection{Metadata}
+
+\textbf{Device placement:} The dataset is balanced---static: 1,970 files (54\%), mobile: 1,686 files (46\%).
+
+\textbf{Recording devices:} iPhone~15 (114), iPhone~13 (85), and iPhone~15~Pro (71) dominate. The first non-Apple device is Samsung Galaxy~A54 (63). This device bias means the dataset mostly captures iPhone microphone characteristics; a model trained on this data may not generalize to Android phones or laptops.
+
+\textbf{Recording environments:} Kitchen is most common (1,070), followed by bedroom (711), hallway (682), living room (557), office (430), bathroom (364), and toilet (199). Rare environments (garage, balcony, outdoor, laundry room, cellar) appear only once. The most frequent sounds (\texttt{running\_water} 11.30\%, \texttt{footsteps} 9.73\%, \texttt{keyboard\_typing} 8.08\%) match the most common environments (kitchen, hallway, office). These biases should be addressed with data augmentation in the next phase.
+
+\subsection{Feature Statistics}
+
+We computed mean, standard deviation, and range for seven acoustic features across all 3,656 files.
+
+\begin{table}[h]
+  \caption{Feature statistics across all recordings.}
+  \label{tab:featstats}
+  \centering
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+    Feature & Mean & Std Dev & Range (Min--Max) \\
+    \midrule
+    MFCC              & $-2.05$ & $0.39$  & $-4.07$ to $-0.63$ \\
+    ZCR               & $0.19$  & $0.09$  & $0.00$ to $0.60$ \\
+    Spectral Centroid  & $2208$  & $633$   & $32$ to $4770$ \\
+    Spectral Bandwidth & $2785$  & $378$   & $48$ to $3787$ \\
+    Spectral Flatness  & $0.09$  & $0.06$  & $0.00$ to $0.99$ \\
+    Low Rolloff        & $301$   & $210$   & $2$ to $2012$ \\
+    High Rolloff       & $5074$  & $960$   & $86$ to $7179$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The wide ranges for Spectral Centroid (4,738\,Hz) and High Rolloff (7,093\,Hz) show the dataset contains both low-frequency sounds (vacuum cleaners, microwaves) and high-frequency sounds (keychains, phone notifications). The low Spectral Flatness mean (0.09) indicates most sounds are tonal rather than noise-like. The high standard deviations (especially Centroid at 632\,Hz and High Rolloff at 960\,Hz) reflect the class diversity observed in Section~2.
+
+\subsection{Feature Correlation}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.65\textwidth]{6.jpeg}
+  \caption{Pearson correlation matrix of audio features across all 3,656 files.}
+  \label{fig:corr}
+\end{figure}
+
+The correlation matrix (Figure~\ref{fig:corr}) reveals strong redundancies: \texttt{bandwidth\_mean} and \texttt{rolloff\_high\_mean} ($r=0.97$), \texttt{zcr\_mean} and \texttt{centroid\_mean} ($r=0.96$), \texttt{centroid\_mean} and \texttt{rolloff\_high\_mean} ($r=0.91$). Moderate correlations include \texttt{zcr\_mean} and \texttt{rolloff\_low\_mean} (0.86), \texttt{centroid\_mean} and \texttt{bandwidth\_mean} (0.82). These high correlations suggest dimensionality reduction (e.g., PCA) should be applied before model training to avoid overfitting. Notably, \texttt{mfcc\_mean} shows near-zero correlation with all other features ($r$ between $-0.11$ and $0.04$), indicating MFCCs capture complementary information and should be retained.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION 4: CONCLUSIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+
+\subsection{Biases}
+
+\textbf{1.~Device bias:} iPhones dominate (iPhone~15: 114, iPhone~13: 85, iPhone~15~Pro: 71). Samsung and other brands appear far less. This over-represents Apple microphone acoustics. A model trained on this data may not generalize to Android phones, laptops, or other consumer devices.
+
+\textbf{2.~Environmental bias:} Kitchens (1,070), bedrooms (711), and hallways (682) are most common. Bathrooms (364) and toilets (199) appear less. Rare environments (garage, balcony, outdoor, laundry room) occur only once. The model will perform well in common rooms but fail in rare ones due to different acoustics.
+
+\textbf{3.~Class imbalance:} \texttt{Running\_water} appears in 11.30\% of segments while \texttt{light\_switch} appears in only 0.13\%. \texttt{Window\_open\_close} (0.72\%) and \texttt{wardrobe\_drawer\_open\_close} (0.97\%) are also rare. The model will learn common classes well but miss rare, short events.
+
+\textbf{Consequences:} Poor real-world generalization, failure on non-Apple devices, and missed critical rare events (e.g., a light switch could indicate a person leaving a room).
+
+\subsection{Dataset Suitability}
+
+The dataset is suitable for training sound event detectors, but with caveats. Positive aspects include high annotator agreement (95.33\%), large scale (3,656 files, 139,259 segments), realistic domestic sounds with natural co-occurrence, and balanced device placement (static 54\%, mobile 46\%). Key challenges include: class imbalance requiring weighting or oversampling; high feature correlation (e.g., $r=0.97$ between bandwidth and rolloff) requiring dimensionality reduction; polyphonic overlap (${\sim}$10\% of segments) requiring multi-label handling; and quiet/short sounds like footsteps (84.82\% agreement) being difficult for both humans and models. We recommend class weighting, PCA, data augmentation (noise, time stretch), and multi-label loss functions for the next phase.
+
+\subsection{Broader Impact}
+
+\textbf{Positive:} The dataset enables smart home automation (flood prevention, appliance monitoring), elderly care (fall detection, unusual silence detection), and energy efficiency research. CC licensing enables global research.
+
+\textbf{Negative:} Potential for unauthorized surveillance (monitoring room entry, occupancy, device usage), employer monitoring without consent, or government intrusion. Privacy risks arise from accidental speech capture.
+
+\textbf{Ethical measures:} Use open licenses (CC0/CC-BY) with clear terms prohibiting surveillance without consent; include an Ethical Use Statement in documentation; anonymize metadata (remove collector names); educate students on responsible AI; implement access controls for commercial use.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DISCLOSURE (does NOT count toward page limit)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Disclosure of LLM and AI Tool Use}
+
+We used DeepSeek to assist with the following aspects of this project:
+
+\textbf{Code generation:} DeepSeek helped generate Python code for loading NPZ files, calculating annotator agreement (2a), converting annotations to binary labels using majority voting (2b), computing label characteristics (frequency, duration, co-occurrence) (2c), analyzing metadata distributions (3a), calculating feature statistics (3b), creating correlation matrices and heatmaps (3c), and performing PCA visualization for the bonus task (3d).
+
+\textbf{Text improvement:} DeepSeek assisted in improving the clarity, structure, and readability of the report answers for all questions, including the summaries of disagreements, case study description, feature correlation interpretation, and conclusions (Question~4).
+
+\textbf{Data interpretation:} DeepSeek helped interpret correlation values, feature statistics, class frequency distributions, annotator agreement patterns, and co-occurrence results.
+
+\textbf{Proofreading:} DeepSeek proofread all code for potential errors and verified that all outputs are consistent, logically sound, and free from faults or errors.
+
+All outputs were reviewed and verified by us before inclusion in this report.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

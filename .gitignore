@@ -1,0 +1,115 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Large data files - Audio features (thousands of files)
+audio_features/
+**/audio_features/
+Task*/audio_features/
+
+# Audio data - train/validation/test splits
+train/
+validation/
+test/
+*/train/
+*/validation/
+*/test/
+
+# Data files (large)
+*.npz
+*.npy
+*.pkl
+*.pickle
+*.wav
+*.mp3
+*.flac
+*.m4a
+
+# Output/Generated files (can be regenerated)
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.log
+*.pptx
+*.docx
+rf_hyperparameter_tuning.png
+median_filtering_results.png
+spectrogram_*.png
+dt_tuning.png
+knn_hyperparameters.png
+RF.png
+rf_hyperparameters.png
+MLPC_Report.pdf
+MLPC_2026S___Data_Classification-3.pdf
+MLPC_Stochastic_Pipelines_Report.pdf
+MLPC_Stochastic_Pipelines_Slides.pdf
+evaluation_slides.pptx
+
+# macOS specific
+__MACOSX/
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor files
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# Package managers & Dependencies
+*.lock
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+Task 1/rayan_ali_javed_submission/
+Past Papers/EXAM.7z
+Past Papers/MLPC-Retry-24S.zip
