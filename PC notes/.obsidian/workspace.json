@@ -8,13 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "4e5a1179b74c5bd5",
+            "id": "85d37ef085751c39",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Chapter 8.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Chapter 8"
             }
           }
         ]
@@ -181,20 +185,24 @@
   },
   "active": "d9e7060415e4782e",
   "lastOpenFiles": [
-    "Untitled.md",
+    "Chapter 7.md",
+    "Chapter 8.md",
+    "Chapter 5 Images/Pasted image 20260614052404.png",
     "Chapter 5.md",
+    "Chapter 5 Images/Pasted image 20260612035652.png",
+    "Chapter 5 Images",
+    "Chapter 4.md",
+    "Chapter 5 Images/Pasted image 20260612054146.png",
+    "Pasted image 20260612054005.png",
+    "Chapter 3.md",
+    "Chapter 4",
     "Untitled.canvas",
     "Chapter 3 Images/Pasted image 20260525173419.png",
-    "Chapter 3.md",
     "Chapter 3 Images/Pasted image 20260522000214.png",
     "Chapter 3 Images/Pasted image 20260522000248.png",
     "Chapter 3 Images/Pasted image 20260521070915.png",
     "Chapter 3 Images/Pasted image 20260521070837.png",
     "Chapter 3 Images/Pasted image 20260521163826.png",
-    "Chapter 3 Images/Pasted image 20260521165043.png",
-    "Chapter 3 Images/Pasted image 20260521165014.png",
-    "Chapter 3 Images/Pasted image 20260521155151.png",
-    "Chapter 3 Images/Pasted image 20260521154945.png",
     "Chapter 3 Images",
     "Chapter 2.md",
     "Chapter 1.md",

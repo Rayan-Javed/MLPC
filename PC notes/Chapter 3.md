@@ -35,10 +35,10 @@ If the coin is biased towards heads, θ=0.7
 
 - **Independent:** The outcome of one toss does not affect the next.
     
-- **Identically distributed:** Every toss uses the **same** probability θθ.
+- **Identically distributed:** Every toss uses the **same** probability θ.
     
 
-**Example:** You toss the same coin 10 times. Each toss is independent (no memory), and each toss has the same θθ. That’s i.i.d.
+**Example:** You toss the same coin 10 times. Each toss is independent (no memory), and each toss has the same θ. That’s i.i.d.
 
 **Real life:**
 
